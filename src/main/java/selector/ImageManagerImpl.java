@@ -94,17 +94,33 @@ public class ImageManagerImpl implements ImageManager{
         String ROOT = System.getProperty("user.dir");
         String SEP = System.getProperty("file.separator");
         String PATH = ROOT + SEP + "src" + SEP + "main" + SEP + "resources" + SEP;
-        String oldd = "TOSELECT" + SEP;
+        String olddImg = "TOSELECT" + SEP;
+        String olddLab = "LABS" + SEP;
         String neww = "CLASSIFIED" + SEP;
+        String imgP = "img" + SEP;
+        String labelP = "label" + SEP;
         
         for (Entry<Value, List<String>> e : classes.entrySet()){
-            String finPath = e.getKey().toString();
-            (new File(PATH + neww + finPath)).mkdirs();
-            finPath += SEP;
-            for (String tmp : e.getValue()) {
-                File oldPos = new File(PATH + oldd + tmp);
-                File newPos = new File(PATH + neww + finPath + tmp);
-                oldPos.renameTo(newPos);
+            String className = e.getKey().toString() + SEP;
+            String newwImg = className + imgP;
+            String newwLab = className + labelP;
+
+            String finNImgP = PATH + neww + newwImg;
+            String finNLabelP = PATH + neww + newwLab;
+            (new File(finNImgP)).mkdirs();
+            (new File(finNLabelP)).mkdirs();
+            
+            for (String tmpName : e.getValue()) {
+                File oldImgF = new File(PATH + olddImg + tmpName);
+                File newImgF = new File(finNImgP + tmpName);
+                oldImgF.renameTo(newImgF);
+
+                String tmpNameL = (tmpName).replace(".jpg", ".txt");
+
+                File oldLabelF = new File(PATH + olddLab + tmpNameL);
+                File newLabelF = new File(finNLabelP + tmpNameL);
+                oldLabelF.renameTo(newLabelF);
+
             }            
         }
 
